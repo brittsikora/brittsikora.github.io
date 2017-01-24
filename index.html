@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta
+            http-equiv = 'Content-Type'
+            content = 'text/html; charset = utf-8'>
+
+        <title>Gardening Timeline</title>
+        <div id = 'title'>Gardening Timeline</div>
+
+        <script type = 'text/javascript'
+            src = 'https://d3js.org/d3.v3.min.js'></script>
+        <script type = 'text/javascript'
+            src = 'https://graphics.rhoworld.com/src/webcharts/webcharts.v1.6.1.js'></script>
+        <script type = 'text/javascript'
+            src = 'aeTimelines.js'></script>
+
+        <link type = 'text/css'
+            rel = 'stylesheet'
+            href = 'https://graphics.rhoworld.com/src/webcharts/webcharts.v1.6.1.css'>
+
+        <style>
+            * {
+                padding: 0;
+                margin: 0;
+                font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+            }
+            #title {
+                width: 96%;
+                margin: 2%;
+                border-bottom: 1px solid lightgray;
+                font-weight: lighter;
+                font-size: 250%;
+            }
+            .chart {
+                width: 96%;
+                margin: 2%;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class = 'chart'>
+            <div class = 'header'></div>
+            <div class = 'content'></div>
+        </div>
+    </body>
+
+    <script>
+        const settings =
+            {id_col: 'Plant Type'
+            ,seq_col: 'Phase'
+            ,stdy_col: 'Event Start'
+            ,endy_col: 'Event End'
+            ,term_col: 'plantPhase'
+            ,color:
+                {value_col: 'growthPhase'
+                ,label: 'Growth Phase'
+                ,values:
+                    ['Germination'
+                    ,'Growth'
+                    ,'Harvest']
+                ,colors:
+                    ['#85c1e9' // Carolina blue 
+                    ,'#76d7c4' //seafoam
+                    ,'#e74c3c' //stop sign
+                    ]}
+            ,highlight: null
+            ,filters: ['Phase']};
+
+        d3.csv('gardentimeline.csv', function(data) {
+            data.forEach(d => {
+                d.growthPhase = d.Phase;
+                d.plantPhase = `${d['Plant Type']} - ${d['Phase']}`;
+            });
+            aeTimelines('.chart .content', settings)
+                .init(data);
+        });
+    </script>
+</html>
